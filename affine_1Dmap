@@ -1,0 +1,27 @@
+affine_lm <- function(a,b,x) {
+  #a=slope
+  #b=intercept
+  #n is the number of elements
+  return(a*x+b)
+}
+
+#translated from: https://calc-again.readthedocs.io/en/latest/calc_notebooks/2.6_calc_discrete_systems.html
+plot_dynamics <- function(x0,n,a,b,st,end,step){
+  x_val = seq(0.0,10.0,2*n) # create array for points xvalue
+  y_val = seq(0.0,10.0,2*n) # create array for points yvalue
+  x = x0
+  for (i in 0:n){
+    x_val[2*i] <- x # first point is (x,f(x))
+    x = affine_lm(a,b,x)
+    y_val[2*i] = x
+    x_val[2*i+1] = x #second point is (f(x),f(x))
+    y_val[2*i+1] = x
+  }
+  plot(x_val, y_val, col = 'blue',type = 'l') #connect up all these points blue
+  xcon = seq(st,end,step)
+  ycon = affine_lm(a,b,xcon)
+  lines(xcon, ycon, col = "red", add=T)
+  lines(xcon, xcon, col = "green", add = T)
+}
+
+plot_dynamics(0.1, 500, 0.9, 10, 0, 50, 0.1)
